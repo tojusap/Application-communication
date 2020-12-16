@@ -3,13 +3,12 @@ package com.example.demo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 /**
  * description: ServiceCall
@@ -26,12 +25,9 @@ public class ServiceCall {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     @ResponseBody
-    public Object callGreeting(){
-        try{
-            ResponseEntity<Object> response = restTemplate.getForEntity(url + "greeting", Object.class);
-            return response.getBody();
-        }catch(HttpStatusCodeException error) {
-            throw error;
-        }
+    public Object test(@RequestParam(value = "name", defaultValue = "World") String name) throws ExecutionException, InterruptedException {
+        Future<Object> fs = new GreetingCommand(restTemplate, url, name).queue();
+        return fs.get();
     }
+
 }
