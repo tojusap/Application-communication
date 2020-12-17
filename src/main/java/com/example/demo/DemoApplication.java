@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class DemoApplication {
 
-	static final String topicExchangeName = "test-topic-exchange";
+	public static final String topicExchangeName = "test-topic-exchange";
 
 	static final String queueName = "test-queue";
 
@@ -44,7 +44,7 @@ public class DemoApplication {
 	}
 
 	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
+		SpringApplication.run(DemoApplication.class, args).close();
 	}
 
 }
